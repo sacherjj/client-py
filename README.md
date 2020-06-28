@@ -19,7 +19,7 @@ Scala CLI `casperlabs-client`. It supports the same commands and options.
 
 ## Installation
 
-`casperlabs-client` is a Python 3.6+ module, it does not support Python 2.7.
+`casperlabs-client` is a Python 3.7+ module, it does not support Python 2.7.
 
 Note: we highly recommend using
 [pipenv](https://github.com/pypa/pipenv)
@@ -64,7 +64,7 @@ pip install casperlabs-client
 ### Windows 10
 
 To install `casperlabs-client` on Windows 10 you need to install latest Python 3.7,
-it is curently not possible to install it on Python 3.8 due to
+it is currently not possible to install it on Python 3.8 due to
 https://github.com/grpc/grpc/issues/20831
 
 It is recommended to install Python from the python.org website:
@@ -193,7 +193,7 @@ To deploy a smart contract to CasperLabs Testnet you have to first:
 1. Create an account using [CasperLabs Explorer](https://clarity.casperlabs.io/#/)
 and transfer (free) tokens to the account from the faucet.
 
-   An account address is a public key in hex format such as:
+   An account address is a hash of public key in hex format such as:
    ```
    f2cbd19d054bd2b2c06ea26714275271663a5e4503d5d059de159c3b60d81ab7
    ```
@@ -208,7 +208,6 @@ To deploy a compiled contract from your account address:
 
 ```python
 response = client.deploy(from_addr="f2cbd19d054bd2b2c06ea26714275271663a5e4503d5d059de159c3b60d81ab7",
-                         gas_price=1,
                          payment_amount=1000000,
                          session="helloname.wasm")
 ```
@@ -219,11 +218,11 @@ Return values of the API functions defined in the `CasperLabsClient` are general
 of the corresponding requests defined in the node's gRPC service, see
 [casper.proto](https://github.com/CasperLabs/CasperLabs/blob/master/protobuf/io/casperlabs/node/api/casper.proto).
 
-Response to requests like `showBlocks` or `showDeploys` is a stream of objects.
+Response to requests like `show_blocks` or `show_deploys` is a stream of objects.
 Corresponding Python API functions return generator objects:
 
 ```python
-for block in client.showBlocks(depth=10):
+for block in client.show_blocks(depth=10):
     print (block.blockHash)
 ```
 
