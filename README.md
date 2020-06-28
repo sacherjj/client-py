@@ -110,14 +110,10 @@ available commands
 $ casperlabs_client --help
 usage: casperlabs_client [--help] [-h HOST] [-p PORT]
                          [--port-internal PORT_INTERNAL] [--node-id NODE_ID]
-                         [--certificate-file CERTIFICATE_FILE]
-                         {deploy,make-deploy,sign-deploy,send-deploy,bond,unbond,transfer,propose,show-block,show-blocks,show-deploy,show-deploys,vdag,query-state,balance,keygen}
+                         [--certificate-file CERTIFICATE_FILE] [--version]
+                         {account-hash,balance,deploy,keygen,make-deploy,propose,query-state,send-deploy,show-block,show-blocks,show-deploy,show-deploys,show-peers,sign-deploy,stream-events,transfer,validator-keygen,vdag}
                          ...
-
 ```
-
-To get detailed documentation of a specific command type `casperlabs_client <command> --help`, for example:
-
 
 ```
 $ casperlabs_client deploy --help
@@ -137,8 +133,8 @@ After installing `casperlabs-client` you can start interacting with
 ```python
 import casperlabs_client
 client = casperlabs_client.CasperLabsClient('deploy.casperlabs.io', 40401)
-blockInfo = next(client.showBlocks(1, full_view=False))
-for bond in blockInfo.summary.header.state.bonds:
+block_info = next(client.show_blocks(1, full_view=False))
+for bond in block_info.summary.header.state.bonds:
     print(f'{bond.validator_public_key.hex()}: {bond.stake.value}')
 ```
 
@@ -158,17 +154,15 @@ Note, you will also see a warning:
 WARNING:root:Creating insecure connection to deploy.casperlabs.io:40401 (<class 'casperlabs_client.casper_pb2_grpc.CasperServiceStub'>)
 ```
 
-Currently it is possible to connect from client to node without SSL encryption,
-which is what the above example code does.
-In the future encryption will become obligatory
-and you will have to pass a `certificate_path` to the `CasperLabsClient` constructor.
+Currently it is possible to connect from client to node without SSL encryption, which is what the above example code does.
+In the future encryption will become obligatory and you will have to pass a `certificate_path` to the `CasperLabsClient` constructor.
 The warning about insecure connection is meant to remind about this.
 
 ## Graph visualization
 
 `casperlabs_client` has `vdag` command that can be used to visualize DAG.
 If you want to use it you need to first install [Graphviz](https://www.graphviz.org/),
-the free graph visuallization software.
+the free graph visualization software.
 
 For example:
 
@@ -176,7 +170,7 @@ For example:
 casperlabs_client --host deploy.casperlabs.io vdag --depth 10 --out dag.png
 ```
 
-will produce an image file simillar to the one below:
+will produce an image file similar to the one below:
 
 
 ![DAG visualization example](https://raw.githubusercontent.com/CasperLabs/CasperLabs/dev/integration-testing/client/CasperLabsClient/example_vdag_output.png)
