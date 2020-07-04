@@ -11,6 +11,7 @@ from casperlabs_client.commands.common_options import (
     ALGORITHM_OPTION,
     PAYMENT_OPTIONS,
 )
+from casperlabs_client.commands.group_validator import PAYMENT_VALIDATOR
 from casperlabs_client.decorators import guarded_command
 
 
@@ -63,6 +64,7 @@ OPTIONS = [
 
 @guarded_command
 def method(casperlabs_client: CasperLabsClient, args: dict):
+    PAYMENT_VALIDATOR.validate(args)
     deploy_hash = casperlabs_client.transfer(
         amount=args.get("amount"),
         target_account=args.get("target_account"),

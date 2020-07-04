@@ -4,6 +4,10 @@ from typing import Dict
 
 from casperlabs_client import io, CasperLabsClient
 from casperlabs_client.commands.common_options import public_key_option, DEPLOY_OPTIONS
+from casperlabs_client.commands.group_validator import (
+    PAYMENT_VALIDATOR,
+    SESSION_VALIDATOR,
+)
 from casperlabs_client.decorators import guarded_command
 
 
@@ -23,9 +27,13 @@ OPTIONS = [
     public_key_option(required=False),
 ] + DEPLOY_OPTIONS
 
+VALIDATORS = [PAYMENT_VALIDATOR, SESSION_VALIDATOR]
+
 
 @guarded_command
 def method(casperlabs_client: CasperLabsClient, args: Dict):
+    for validator in VALIDATORS:
+        validator.validate(args)
     deploy = casperlabs_client.make_deploy(
         from_addr=args.get("from"),
         payment=args.get("payment"),
